@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Expense.DTO;
+using MediatR;
 
 namespace Expense.Commands
 {
@@ -10,5 +11,5 @@ namespace Expense.Commands
     /// <param name="Amount">Amount of the expense</param>
     /// <param name="Date">Date of the expense</param>
     /// <param name="Commentary">Commentary for the expense</param>
-    public record CommandCreateExpense(int UserId, int NatureId, decimal Amount, DateTime Date, string Commentary) : IRequest<bool>;
+    public record CommandCreateExpense(ExpenseCreateDto Expense) : IRequest<bool>;
 }

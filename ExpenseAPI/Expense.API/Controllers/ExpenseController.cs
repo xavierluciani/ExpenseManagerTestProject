@@ -59,12 +59,12 @@ namespace Expense.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [Route("CreateExpense/{idUser}/{idNature}/{amount}/{date}/{commentary}")]
-        public async Task<IActionResult> Create(int idUser, int idNature, decimal amount, DateTime date, string commentary)
+        [Route("CreateExpense")]
+        public async Task<IActionResult> Create([FromBody] ExpenseCreateDto expense)
         {
             try
             {
-                await this._mediatr.Send(new CommandCreateExpense(idUser, idNature, amount, date, commentary));
+                await this._mediatr.Send(new CommandCreateExpense(expense));
                 return Created();
             }
             catch (BadRequestWebException ex)

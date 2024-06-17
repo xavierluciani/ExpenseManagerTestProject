@@ -37,20 +37,20 @@ namespace Expense.CommandHandlers
         /// <returns>Result of the operation</returns>
         public async Task<bool> Handle(CommandCreateExpense request, CancellationToken cancellationToken)
         {
-            this.CheckMandatoryCommentary(request.Commentary);
-            this.IsDateInFuture(request.Date);
-            this.IsDateOlderThanThreeMonth(request.Date);
-            await this.IsUserExists(request.UserId);
-            await this.IsNatureExists(request.NatureId);
-            await this.IsExpenseAlreadyDeclared(request.Amount, request.Date);
+            this.CheckMandatoryCommentary(request.Expense.ExpCommentary ?? string.Empty);
+            this.IsDateInFuture(request.Expense.ExpDate);
+            this.IsDateOlderThanThreeMonth(request.Expense.ExpDate);
+            await this.IsUserExists(request.Expense.IdUsr);
+            await this.IsNatureExists(request.Expense.IdNat);
+            await this.IsExpenseAlreadyDeclared(request.Expense.ExpAmount, request.Expense.ExpDate);
 
             var expenseDto = new ExpenseDto()
             {
-                IdUsr = request.UserId,
-                IdNat = request.NatureId,
-                ExpAmount = request.Amount,
-                ExpDate = request.Date,
-                ExpCommentary = request.Commentary,
+                IdUsr = request.Expense.IdUsr,
+                IdNat = request.Expense.IdNat,
+                ExpAmount = request.Expense.ExpAmount,
+                ExpDate = request.Expense.ExpDate,
+                ExpCommentary = request.Expense.ExpCommentary,
             };
 
             return await this._expenseService.AddExpense(expenseDto);
