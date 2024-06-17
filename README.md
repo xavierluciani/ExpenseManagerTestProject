@@ -1,6 +1,26 @@
 # Expense manager
 
 Solution is developed in .NET 8 version implementing CQRS pattern architecture.
+Solution allows user to manage expenses.
+
+### Creating an expense
+
+This API (REST) must make it possible to:
+ - Create an expense taking into account the validation rules.
+
+Rules for validating an expense:
+- An expense cannot have a date in the future,
+- An expense cannot be dated more than 3 months ago,
+- The comment is obligatory,
+- A user cannot declare the same expense twice (same date and same amount),
+- The currency of the expense must be identical to that of the user.
+
+### List of expenses
+This API (REST) must make it possible to:
+
+- List expenses for a given user,
+- Sort expenses by amount or date,
+- Display all the properties of the expense; the user of the expense must appear in the form {FirstName} {LastName} (eg: "Anthony Stark").
 
 ## Main technical stack
 .NET 8 - SQL Server 2022 - EF Core 8 - Automapper - Mediatr - Moq - UnitTesting
