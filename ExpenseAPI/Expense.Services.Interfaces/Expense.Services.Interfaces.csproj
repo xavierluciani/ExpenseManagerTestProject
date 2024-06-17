@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Expense.Common\Expense.Common.csproj" />
+    <ProjectReference Include="..\Expense.DTO\Expense.DTO.csproj" />
+  </ItemGroup>
+
+</Project>

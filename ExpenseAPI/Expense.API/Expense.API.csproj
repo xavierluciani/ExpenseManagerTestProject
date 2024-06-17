@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Expense.CommandHandlers\Expense.CommandHandlers.csproj" />
+    <ProjectReference Include="..\Expense.Commands\Expense.Commands.csproj" />
+    <ProjectReference Include="..\Expense.Queries\Expense.Queries.csproj" />
+    <ProjectReference Include="..\Expense.QueryHandlers\Expense.QueryHandlers.csproj" />
+  </ItemGroup>
+
+</Project>

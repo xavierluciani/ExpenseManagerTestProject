@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Expense.DTO\Expense.DTO.csproj" />
+    <ProjectReference Include="..\Expense.Entities\Expense.Entities.csproj" />
+    <ProjectReference Include="..\Expense.Repositories\Expense.Repositories.csproj" />
+    <ProjectReference Include="..\Expense.Services.Interfaces\Expense.Services.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Expense.Commands\Expense.Commands.csproj" />
+    <ProjectReference Include="..\Expense.DTO\Expense.DTO.csproj" />
+    <ProjectReference Include="..\Expense.Services.Interfaces\Expense.Services.Interfaces.csproj" />
+    <ProjectReference Include="..\Expense.Services\Expense.Services.csproj" />
+  </ItemGroup>
+
+</Project>
