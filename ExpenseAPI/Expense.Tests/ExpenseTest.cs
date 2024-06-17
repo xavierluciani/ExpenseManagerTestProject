@@ -44,7 +44,8 @@ namespace Expense.Tests
         [TestMethod]
         public async Task CreateExpenseHandler()
         {
-            CommandCreateExpense command = new CommandCreateExpense(It.IsAny<int>(), It.IsAny<int>(), 100, DateTime.Now.AddDays(-1), "Test");
+            var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(-1), ExpCommentary = "Test" };
+            CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
             userService.Setup(u => u.IsUserExists(It.IsAny<int>())).ReturnsAsync(true);
             natureService.Setup(n => n.IsNatureExists(It.IsAny<int>())).ReturnsAsync(true);
             expenseService.Setup(s => s.IsExpenseExists(It.IsAny<decimal>(), It.IsAny<DateTime>())).ReturnsAsync(false);
@@ -63,7 +64,8 @@ namespace Expense.Tests
         [ExpectedException(typeof(ConflictWebException))]
         public async Task CreateExpenseFailExpenseAlreadyExsists()
         {
-            CommandCreateExpense command = new CommandCreateExpense(It.IsAny<int>(), It.IsAny<int>(), 100, DateTime.Now.AddDays(-1), "Test");
+            var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(-1), ExpCommentary = "Test" };
+            CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
             userService.Setup(u => u.IsUserExists(It.IsAny<int>())).ReturnsAsync(true);
             natureService.Setup(n => n.IsNatureExists(It.IsAny<int>())).ReturnsAsync(true);
             expenseService.Setup(s => s.IsExpenseExists(It.IsAny<decimal>(), It.IsAny<DateTime>())).ReturnsAsync(true);
@@ -79,7 +81,8 @@ namespace Expense.Tests
         [ExpectedException(typeof(NotFoundWebException))]
         public async Task CreateExpenseFailUserNotFound()
         {
-            CommandCreateExpense command = new CommandCreateExpense(It.IsAny<int>(), It.IsAny<int>(), 100, DateTime.Now.AddDays(-1), "Test");
+            var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(-1), ExpCommentary = "Test" };
+            CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
             userService.Setup(u => u.IsUserExists(It.IsAny<int>())).ReturnsAsync(false);
             natureService.Setup(n => n.IsNatureExists(It.IsAny<int>())).ReturnsAsync(true);
             expenseService.Setup(s => s.IsExpenseExists(It.IsAny<decimal>(), It.IsAny<DateTime>())).ReturnsAsync(false);
@@ -95,7 +98,8 @@ namespace Expense.Tests
         [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailNatureNotFound()
         {
-            CommandCreateExpense command = new CommandCreateExpense(It.IsAny<int>(), It.IsAny<int>(), 100, DateTime.Now.AddDays(-1), "Test");
+            var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(-1), ExpCommentary = "Test" };
+            CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
             userService.Setup(u => u.IsUserExists(It.IsAny<int>())).ReturnsAsync(true);
             natureService.Setup(n => n.IsNatureExists(It.IsAny<int>())).ReturnsAsync(false);
             expenseService.Setup(s => s.IsExpenseExists(It.IsAny<decimal>(), It.IsAny<DateTime>())).ReturnsAsync(true);
@@ -111,7 +115,8 @@ namespace Expense.Tests
         [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailFutureDate()
         {
-            CommandCreateExpense command = new CommandCreateExpense(It.IsAny<int>(), It.IsAny<int>(), 100, DateTime.Now.AddDays(1), "Test");
+            var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(1), ExpCommentary = "Test" };
+            CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
             await handler.Handle(command, It.IsAny<CancellationToken>());
@@ -124,7 +129,8 @@ namespace Expense.Tests
         [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailDateOlderThanThreeMonths()
         {
-            CommandCreateExpense command = new CommandCreateExpense(It.IsAny<int>(), It.IsAny<int>(), 100, DateTime.Now.AddMonths(-4), "Test");
+            var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddMonths(-4), ExpCommentary = "Test" };
+            CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
             await handler.Handle(command, It.IsAny<CancellationToken>());
@@ -137,7 +143,8 @@ namespace Expense.Tests
         [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailCommentaryEmpty()
         {
-            CommandCreateExpense command = new CommandCreateExpense(It.IsAny<int>(), It.IsAny<int>(), 100, DateTime.Now.AddDays(-1), "  ");
+            var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(1), ExpCommentary = "  " };
+            CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
             await handler.Handle(command, It.IsAny<CancellationToken>());
