@@ -1,6 +1,9 @@
 ﻿
 namespace Expense.DTO
 {
+    /// <summary>
+    /// Expense to create DTO
+    /// </summary>
     public class ExpenseCreateDto
     {
         /// <summary>
