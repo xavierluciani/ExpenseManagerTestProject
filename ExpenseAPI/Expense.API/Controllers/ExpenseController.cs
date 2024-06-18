@@ -64,8 +64,8 @@ namespace Expense.API.Controllers
         {
             try
             {
-                await this._mediatr.Send(new CommandCreateExpense(expense));
-                return Created();
+                var result = await this._mediatr.Send(new CommandCreateExpense(expense));
+                return Created(string.Empty, result);
             }
             catch (BadRequestWebException ex)
             {
