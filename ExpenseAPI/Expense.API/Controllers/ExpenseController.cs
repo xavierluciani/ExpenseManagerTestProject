@@ -30,6 +30,7 @@ namespace Expense.API.Controllers
         [Route("GetAllUserExpenses/{userId}/{sort}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(IEnumerable<ExpenseDto>), 200)]
         public async Task<IActionResult> GetAllUserExpenses(int userId, SortExpense sort)
         {
@@ -59,6 +60,7 @@ namespace Expense.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("CreateExpense")]
         public async Task<IActionResult> Create([FromBody] ExpenseCreateDto expense)
         {
