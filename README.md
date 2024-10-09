@@ -1,6 +1,6 @@
 # Expense manager
 
-Solution is developed in .NET 8 version implementing CQRS pattern architecture.
+Solution is developed in .NET 8 version implementing CQRS pattern architecture.\
 Solution allows user to manage expenses.
 
 ### Creating an expense
@@ -19,15 +19,14 @@ Rules for validating an expense:
 This API (REST) must make it possible to:
 
 - List expenses for a given user,
-- Sort expenses by amount or date,
 - Display all the properties of the expense; the user of the expense must appear in the form {FirstName} {LastName} (eg: "Anthony Stark").
 
 ## Main technical stack
-.NET 8 - SQL Server 2022 - EF Core 8 - Automapper - Mediatr - Moq - UnitTesting
+.NET 8 - SQL Server 2022 - EF Core 8 - Automapper - Mediatr - Moq - UnitTesting\
 Entities generated with EF Core Power Tools
 
 ### Database initialization
-Data base must be created with script.sql located in DBB folder.
+Data base must be created with script.sql located in DBB folder.\
 First datas are stored at the startup of the solution if tables are empty.
 
 ### Architecture
