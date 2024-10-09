@@ -18,7 +18,7 @@ namespace Expense.Repositories.Interfaces
         /// </summary>
         /// <param name="id">CUrrent id</param>
         /// <returns>Entity asked</returns>
-        Task<TEntity> GetById(int id);
+        Task<TEntity?> GetById(int id);
         /// <summary>
         /// Add a new entity.
         /// </summary>

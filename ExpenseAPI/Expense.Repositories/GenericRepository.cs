@@ -45,7 +45,7 @@ namespace Expense.Repositories
         /// </summary>
         /// <param name="id">CUrrent id</param>
         /// <returns>Entity asked</returns>
-        public virtual async Task<TEntity> GetById(int id)
+        public virtual async Task<TEntity?> GetById(int id)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Expense.Repositories
             try
             {
                 await this._dbSet.AddAsync(entity);
-                this._context.SaveChanges();
+                await this._context.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
@@ -89,7 +89,7 @@ namespace Expense.Repositories
                 if (entity != null)
                 {
                     this._dbSet.Remove(entity);
-                    this._context.SaveChanges();
+                    await this._context.SaveChangesAsync();
                     return true;
                 }
                 else

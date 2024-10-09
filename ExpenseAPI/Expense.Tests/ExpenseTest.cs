@@ -8,7 +8,9 @@ namespace Expense.Tests
     using Expense.Queries;
     using Expense.QueryHandlers;
     using Expense.Services.Interfaces;
+    using MediatR;
     using Moq;
+    using System;
 
     [TestClass]
     public class ExpenseTest
@@ -61,7 +63,6 @@ namespace Expense.Tests
         /// Test method to check the failure because expense already exists.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ConflictWebException))]
         public async Task CreateExpenseFailExpenseAlreadyExsists()
         {
             var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(-1), ExpCommentary = "Test" };
@@ -71,14 +72,14 @@ namespace Expense.Tests
             expenseService.Setup(s => s.IsExpenseExists(It.IsAny<decimal>(), It.IsAny<DateTime>())).ReturnsAsync(true);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
-            await handler.Handle(command, It.IsAny<CancellationToken>());
+
+            await AssertException<ConflictWebException, CommandCreateExpense>(handler.Handle, command, It.IsAny<CancellationToken>());
         }
 
         /// <summary>
         /// Test method to check the failure because the user is not found.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(NotFoundWebException))]
         public async Task CreateExpenseFailUserNotFound()
         {
             var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(-1), ExpCommentary = "Test" };
@@ -88,14 +89,13 @@ namespace Expense.Tests
             expenseService.Setup(s => s.IsExpenseExists(It.IsAny<decimal>(), It.IsAny<DateTime>())).ReturnsAsync(false);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
-            await handler.Handle(command, It.IsAny<CancellationToken>());
+            await AssertException<NotFoundWebException, CommandCreateExpense>(handler.Handle, command, It.IsAny<CancellationToken>());
         }
 
         /// <summary>
         /// Test method to check the failure because the nature of the expense is not found.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailNatureNotFound()
         {
             var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(-1), ExpCommentary = "Test" };
@@ -105,49 +105,70 @@ namespace Expense.Tests
             expenseService.Setup(s => s.IsExpenseExists(It.IsAny<decimal>(), It.IsAny<DateTime>())).ReturnsAsync(true);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
-            await handler.Handle(command, It.IsAny<CancellationToken>());
+            await AssertException<BadRequestWebException, CommandCreateExpense>(handler.Handle, command, It.IsAny<CancellationToken>());
         }
 
         /// <summary>
         /// Test method to check the failure because the expense date is in the future.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailFutureDate()
         {
             var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(1), ExpCommentary = "Test" };
             CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
-            await handler.Handle(command, It.IsAny<CancellationToken>());
+            await AssertException<BadRequestWebException, CommandCreateExpense>(handler.Handle, command, It.IsAny<CancellationToken>());
         }
 
         /// <summary>
         /// Test method to check the failure because the date is older than three months.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailDateOlderThanThreeMonths()
         {
             var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddMonths(-4), ExpCommentary = "Test" };
             CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
-            await handler.Handle(command, It.IsAny<CancellationToken>());
+            await AssertException<BadRequestWebException, CommandCreateExpense>(handler.Handle, command, It.IsAny<CancellationToken>());
         }
 
         /// <summary>
         /// Test method to check the failure because the commentary is empty.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(BadRequestWebException))]
         public async Task CreateExpenseFailCommentaryEmpty()
         {
             var expenseCreateDto = new ExpenseCreateDto() { IdUsr = It.IsAny<int>(), IdNat = It.IsAny<int>(), ExpAmount = 100, ExpDate = DateTime.Now.AddDays(1), ExpCommentary = "  " };
             CommandCreateExpense command = new CommandCreateExpense(expenseCreateDto);
 
             CommandCreateExpenseHandler handler = new(expenseService.Object, userService.Object, natureService.Object);
-            await handler.Handle(command, It.IsAny<CancellationToken>());
+            await AssertException<BadRequestWebException, CommandCreateExpense>(handler.Handle, command, It.IsAny<CancellationToken>());
+        }
+
+        /// <summary>
+        /// Handler delegate method.
+        /// </summary>
+        /// <typeparam name="TCommand">Command method type</typeparam>
+        /// <param name="request">Request method</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        private delegate Task<bool> HandleDelegate<TCommand>(TCommand request, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Verify if the <see cref="Exception"/> is correctly thrown during the assert.
+        /// </summary>
+        /// <typeparam name="TException">Exception type expected</typeparam>
+        /// <typeparam name="TCommand">Command type</typeparam>
+        /// <param name="handle">Handler delegate to be invoked</param>
+        /// <param name="command">Command to be executed by the handler</param>
+        /// <param name="token">Cancellation token</param>
+        private static async Task AssertException<TException, TCommand>(HandleDelegate<TCommand> handle, TCommand command, CancellationToken token)
+            where TException : Exception
+            where TCommand : IRequest<bool>
+        {
+            await Assert.ThrowsExceptionAsync<TException>(async () => await handle.Invoke(command, token));
         }
     }
 }
