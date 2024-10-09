@@ -3,11 +3,11 @@
 Solution is developed in .NET 8 version implementing CQRS pattern architecture.
 
 ## Main technical stack
-.NET 8 - SQL Server 2022 - EF Core 8 - Automapper - Mediatr - Moq - UnitTesting
+.NET 8 - SQL Server 2022 - EF Core 8 - Automapper - Mediatr - Moq - UnitTesting.\
 Entities generated with EF Core Power Tools
 
 ### Database initialization
-Data base must be created with script.sql located in DBB folder.
+Data base must be created with script.sql located in DBB folder.\
 First datas are stored at the startup of the solution if tables are empty.
 
 ### Architecture
